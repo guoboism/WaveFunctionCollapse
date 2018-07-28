@@ -1,4 +1,4 @@
-# 波函数塌陷
+# 波函数坍缩
 这个程序可以生成和输入图像局部相似的图像
 
 <p align="center"><img alt="main collage" src="http://i.imgur.com/g1yGvL7.png"></p>
@@ -9,12 +9,11 @@
 * (C1) 输出图像中，每个NxN范围的像素图案，都至少在输入图像中出现一次。
 * (Weak C2) 输入图像中各个像素图案的分布方式，应该和输出图像中的大量分布保持相识。换句话说，输出图像中某个图案的出现概率应该和输入图像一样。
 
-In the examples typical value of N is 3.
 在范例中，N一般是3。
 
 <p align="center"><img alt="local similarity" src="http://i.imgur.com/KULGX86.png"></p>
  
-WFC(波函数塌陷，下同) 以一种完全的“未被观察”的状态初始化输出图象，每个像素的值是输入图像的多种颜色的叠加（因此，如果输入的是黑白图像，那么“未被观察”的状态就是灰度中的某一级）。这种叠加态的系数都是实数，而不是复数，所以它不包含真的量子力学，但是这个算法受其启发。接下来，程序进入了 “观测-传播” 的循环：
+WFC(波函数坍缩，下同) 以一种完全的“未被观察”的状态初始化输出图象，每个像素的值是输入图像的多种颜色的叠加（因此，如果输入的是黑白图像，那么“未被观察”的状态就是灰度中的某一级）。这种叠加态的系数都是实数，而不是复数，所以它不包含真的量子力学，但是这个算法受其启发。接下来，程序进入了 “观测-传播” 的循环：
 
 * 每一个“观察”步骤，我们从未被观察的区域中选择一个NxN的区域，要保证这个区域有最小的香农熵(Shannon entropy).这个区域的状态根据它的系数和输入图像中各个图案的分布概率因此塌陷成一个有限的状态。
 
@@ -22,7 +21,7 @@ WFC(波函数塌陷，下同) 以一种完全的“未被观察”的状态初�
 * 每个一个“传播”的步骤，上一个观察步骤得到的新的信息，将会在输出图像中传播。
 
  
-每经过一个步骤，总体的熵将会减少，最后我们会有一个完全观察过的状态，波函数就塌陷。
+每经过一个步骤，总体的熵将会减少，最后我们会有一个完全观察过的状态，波函数就坍缩。
 
  
 有可能发生的情况是，在传播的过程中，某个像素的所有系数可能都会变成0。这意味着算法走进了一个死路。要想判定一个输入图像是否能够产生与其完全不同的图像，是一个NP困难的问题，所以不可能找到一个快速的，在有限的时间内完成。但是在实践中，这个算法出人意料的极少陷入自我矛盾的情况。
@@ -50,12 +49,9 @@ WFC(波函数塌陷，下同) 以一种完全的“未被观察”的状态初�
 
 5. 现在，所有的“波”数组的元素，要么在一个完全的被观测的状态（只有一个系数是真），或者出一个自相矛盾的状态（所有的系数都是假）。第一种情况，返回结果，第二种情况，完成程序但是不返回结果。
 
-## Tilemap generation
-The simplest nontrivial case of the algorithm is when NxN=1x2 (well, NxM). If we simplify it even further by storing not the probabilities of pairs of colors but the probabilities of colors themselves, we get what we call a "simple tiled model". The propagation phase in this model is just adjacency constraint propagation. It's convenient to initialize the simple tiled model with a list of tiles and their adjacency data (adjacency data can be viewed as a large set of very small samples) rather than a sample bitmap.
 
 ## 地砖生成
 这个算法所能产生的最简单不平凡解的情况是当NxN为1x2时。如果我们把它进一步简单化为不存颜色对的概率而是颜色值本身概率，我们就得到一个“简单地砖模型”。这个模型里的传播步骤仅仅是近邻限制的传播。可以很方便的把这个模型初始化为一个砖块的列表以及他们的相邻性数据（相邻性数据可以被看成是很多小样本的大集合）而不是一个简单的位图。
-The simplest nontrivial case of the algorithm is when NxN=1x2 (well, NxM). If we simplify it even further by storing not the probabilities of pairs of colors but the probabilities of colors themselves, we get what we call a "simple tiled model". The propagation phase in this model is just adjacency constraint propagation. It's convenient to initialize the simple tiled model with a list of tiles and their adjacency data (adjacency data can be viewed as a large set of very small samples) rather than a sample bitmap.
 
 
 <p align="center">
@@ -63,15 +59,12 @@ The simplest nontrivial case of the algorithm is when NxN=1x2 (well, NxM). If we
   <a href="http://i.imgur.com/jIctSoT.gifv">GIFV</a>
 </p>
 
-Lists of all the possible pairs of adjacent tiles in practical tilesets can be quite long, so I implemented a symmetry system for tiles to shorten the enumeration. In this system each tile should be assigned with its symmetry type.
-
+ 
 在实际的地砖集合中，列出所有的可能的相邻的砖块的列表可能会非常长，所以我们构建了一个对称系统来减少枚举种类。这个系统中，每个地砖都有一个对应的枚举值。
 
 <p align="center"><img alt="symmetries" src="http://i.imgur.com/9H0frmK.png"></p>
 
-Note that the tiles have the same symmetry type as their assigned letters (or, in other words, actions of the 
-dihedral group D4 are isomorphic for tiles and their corresponding letters). With this system it's enough to enumerate pairs of adjacent tiles only up to symmetry, which makes lists of adjacencies for tilesets with many symmetrical tiles (even the summer tileset, despite drawings not being symmetrical the system considers such tiles to be symmetrical) several times shorter.
-
+ 
 要注意的是，这些砖块都有和他们被赋予的字母相同的对称类型（换句话说，二面体组D4的动作对于砖块及其各自的字母是同构的）。这个系统中，仅用对称度来给各种砖块赋予枚举值是足够用的，这样使得枚举列表短了好几倍（有些砖块并不对称但是系统依旧把他们当作对称的砖块）。
 
 <p align="center">
@@ -84,13 +77,9 @@ dihedral group D4 are isomorphic for tiles and their corresponding letters). Wit
 	<img alt="summer 1" src="http://i.imgur.com/re8WBud.png">
 	<img alt="summer 2" src="http://i.imgur.com/OmUHk1t.png">
 </p>
-
-Note that the unrestrained knot tileset (with all 5 tiles being allowed) is not interesting for WFC, because you can't run into a situation where you can't place a tile. We call tilesets with this property "easy". For example, Wang tilesets are easy. Without special heuristics easy tilesets don't produce interesting global arrangements, because correlations of tiles in easy tilesets quickly fall off with a distance.
-
+ 
 注意，没有边缘限制的孤立砖块，对于WFC来说没有太大的兴趣，因为你总是能把他们摆下。这种图集对于WFC来说是“简单”的。王氏砖块是“简单”的。没有特殊的启发，简单的图集不会产生有趣的全局图案，因为砖块的相关性随着距离快速的消失。
-
-Many interesting Wang tilesets can be found on [cr31's site](http://s358455341.websitehome.co.uk/stagecast/wang/tiles_e.html). Consider the "Dual" 2-edge tileset there. How can it generate knots (without t-junctions, not easy) while being easy? The answer is, it can only generate a narrow class of knots, it can't produce an arbitrary knot.
-
+ 
 很多有趣的王氏砖块可以在这个地址找到[cr31's site](http://s358455341.websitehome.co.uk/stagecast/wang/tiles_e.html)。
 
 
@@ -105,9 +94,7 @@ WFC 在更高的维度与二维的情况完全一样, 尽管运行性能可能�
 
 WFC生成体素模型和其他相关算法会在另一个单独的repo里。 
 
-## Constrained synthesis
-WFC algorithm supports constraints. Therefore, it can be easely combined with other generative algorithms or with manual creation.
-
+ 
 ## 有限制的生成算法
 WFC 算法支持. 因此, 它可以和其他的生成算法向结合。
 
