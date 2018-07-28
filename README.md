@@ -15,11 +15,9 @@
  
 WFC(波函数坍缩，下同) 以一种完全的“未被观察”的状态初始化输出图象，每个像素的值是输入图像的多种颜色的叠加（因此，如果输入的是黑白图像，那么“未被观察”的状态就是灰度中的某一级）。这种叠加态的系数都是实数，而不是复数，所以它不包含真的量子力学，但是这个算法受其启发。接下来，程序进入了 “观测-传播” 的循环：
 
-* 每一个“观察”步骤，我们从未被观察的区域中选择一个NxN的区域，要保证这个区域有最小的香农熵(Shannon entropy).这个区域的状态根据它的系数和输入图像中各个图案的分布概率因此塌陷成一个有限的状态。
+* 每一个“观察”步骤，我们从未被观察的区域中选择一个NxN的区域，要保证这个区域有最小的香农熵(Shannon entropy).这个区域的状态根据它的系数和输入图像中各个图案的分布概率因此坍缩成一个有限的状态。
 
- 
 * 每个一个“传播”的步骤，上一个观察步骤得到的新的信息，将会在输出图像中传播。
-
  
 每经过一个步骤，总体的熵将会减少，最后我们会有一个完全观察过的状态，波函数就坍缩。
 
@@ -51,7 +49,7 @@ WFC(波函数坍缩，下同) 以一种完全的“未被观察”的状态初�
 
 
 ## 地砖生成
-这个算法所能产生的最简单不平凡解的情况是当NxN为1x2时。如果我们把它进一步简单化为不存颜色对的概率而是颜色值本身概率，我们就得到一个“简单地砖模型”。这个模型里的传播步骤仅仅是近邻限制的传播。可以很方便的把这个模型初始化为一个砖块的列表以及他们的相邻性数据（相邻性数据可以被看成是很多小样本的大集合）而不是一个简单的位图。
+这个算法所能产生的最简单不平凡解的情况是当NxN为1x2时。如果我们把它进一步简单化为不去储存颜色对的概率而是颜色值本身的概率，我们就得到一个“简单地砖模型”。这个模型里的传播步骤仅仅是近邻限制的传播。可以很方便的把这个模型初始化为一个砖块的列表以及他们的相邻性数据（相邻性数据可以被看成是很多小样本的大集合）而不是一个简单的位图。
 
 
 <p align="center">
@@ -96,9 +94,9 @@ WFC生成体素模型和其他相关算法会在另一个单独的repo里。
 
  
 ## 有限制的生成算法
-WFC 算法支持. 因此, 它可以和其他的生成算法向结合。
+WFC算法支持预先限制。因此, 它可以和其他的生成算法相结合。
 
-这是一个WFC自动完成一个由人类开始的关卡：
+这是一个WFC自动完成一个由人类开始设计的关卡过程：
 
 <p align="center">
   <a href="http://i.imgur.com/X3aNDUv.gif">GIF</a> |
@@ -109,8 +107,9 @@ WFC 算法支持. 因此, 它可以和其他的生成算法向结合。
 
 P. F. Harrison's [texture synthesis](https://github.com/mxgmn/SynTex) algorithm is significantly faster than WFC, but it has trouble with long correlations (for example, it's difficult for this algorithm to synthesize brick wall textures with correctly aligned bricks). But this is exactly where WFC shines, and Harrison's algorithm supports constraints. It makes sense first to generate a perfect brick wall blueprint with WFC and then run a constrained texture synthesis algorithm on that blueprint.
 
-## Comments
-Why the minimal entropy heuristic? I noticed that when humans draw something they often follow the minimal entropy heuristic themselves. That's why the algorithm is so enjoyable to watch.
+## 评论
+
+为何选择最小的熵值？我注意到人类自己画东西总是跟随着最小熵值的地方去画。这也是为什么这个算法的过程很好看。
 
 The overlapping model relates to the simple tiled model the same way higher order Markov chains relate to order one Markov chains.
 
@@ -122,12 +121,12 @@ Note that the "Simple Knot" and "Trick Knot" samples have 3 colors, not 2.
 
 One of the dimensions can be time. In particular, d-dimensional WFC captures the behaviour of any (d-1)-dimensional cellular automata.
 
-## References
+## 引用
 This project builds upon Paul Merrell's work on model synthesis, in particular discrete model synthesis chapter of [his dissertation](http://graphics.stanford.edu/~pmerrell/thesis.pdf). Paul propagates adjacency constraints in what we call a simple tiled model with a heuristic that tries to complete propagation in a small moving region.
 
 It was also heavily influenced by declarative texture synthesis chapter of [Paul F. Harrison's dissertation](http://logarithmic.net/pfh-files/thesis/dissertation.pdf). Paul defines adjacency data of tiles by labeling their borders and uses backtracking search to fill the tilemap.
 
-## Notable ports, forks and spinoffs
+## 值得关注的fork，port和衍生
 
 * Emil Ernerfeldt made a [C++ port](https://github.com/emilk/wfc).
 * [Max Aller](https://github.com/nanodeath) made a Kotlin (JVM) library, [Kollapse](https://gitlab.com/nanodeath/kollapse).
@@ -161,10 +160,10 @@ that the resulting observed zone is navigable at each step.
 * [Sylvain Lefebvre](https://github.com/sylefeb), [Li-Yi Wei](https://github.com/1iyiwei) and [Connelly Barnes](https://github.com/connellybarnes) are [investigating](https://hal.archives-ouvertes.fr/hal-01706539/) the possibility of hiding information inside textures. They made a [tool](https://members.loria.fr/Sylvain.Lefebvre/infotexsyn/) that can encode text messages as WFC tilings and decode them back. This technique allows to use WFC tilings as QR codes.
 * [Mathieu Fehr](https://github.com/math-fehr) and [Nathanael Courant](https://github.com/Ekdohibs) significantly [improved](https://github.com/math-fehr/fast-wfc) the running time of WFC, by an order of magnitude for the overlapping model.
 
-## How to build
+## 如何编译
 WFC is a console application that depends only on the standard library. Build instructions from the community for various platforms can be found in the [relevant issue](https://github.com/mxgmn/WaveFunctionCollapse/issues/3). Casey Marshall made a [pull request](https://github.com/mxgmn/WaveFunctionCollapse/pull/18) that makes using the program with the command line more convenient and includes snap packaging.
 
-## Credits
+## 致谢
 Some samples are taken from the games Ultima IV and [Dungeon Crawl](https://github.com/crawl/crawl). Circles tileset is taken from [Mario Klingemann](https://twitter.com/quasimondo/status/778196128957403136). Idea of generating integrated circuits was suggested to me by [Moonasaur](https://twitter.com/Moonasaur/status/759890746350731264) and their style was taken from Zachtronics' [Ruckingenur II](http://www.zachtronics.com/ruckingenur-ii/). Cat overlapping sample is taken from the Nyan Cat video, Qud sample was made by [Brian Bucklew](https://github.com/unormal), Magic Office + Spirals samples - by rid5x, Colored City + Link + Link 2 + Mazelike + Red Dot + Smile City overlapping samples - by Arvi Teikari. Summer tileset was made by Hermann Hillmann. Voxel models were rendered in [MagicaVoxel](http://ephtracy.github.io/).
 
 <p align="center"><img alt="second collage" src="http://i.imgur.com/CZsvnc7.png"></p>
